@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
+import { projects, slug } from './projects.js'
 
 const STATS = [
-  ['03', 'Projects in orbit'],
+  [String(projects.length).padStart(2, '0'), 'Projects in orbit'],
   ['React', 'Primary stack'],
   ['∞', 'Curiosity'],
 ]
@@ -16,15 +17,6 @@ function Orbit({ n, layer }) {
 
 export default function Hero() {
   const canvasRef = useRef(null)
-  const [sec, setSec] = useState(0)
-
-  // mission clock
-  useEffect(() => {
-    const id = setInterval(() => setSec(s => s + 1), 1000)
-    return () => clearInterval(id)
-  }, [])
-  const clock = [(sec / 3600) | 0, ((sec / 60) | 0) % 60, sec % 60]
-    .map(n => String(n).padStart(2, '0')).join(':')
 
   // starfield + shooting stars
   useEffect(() => {
@@ -94,17 +86,37 @@ export default function Hero() {
     }
   }, [])
 
+  // scroll progress through the hero (0 at top, 1 when it has fully scrolled away).
+  // CSS reads it as --hp to drive the fade/parallax in index.css.
+  useEffect(() => {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const root = document.documentElement
+    const hero = document.getElementById('top')
+    let raf = 0
+
+    function update() {
+      raf = 0
+      const p = Math.min(Math.max(scrollY / hero.offsetHeight, 0), 1)
+      root.style.setProperty('--hp', p.toFixed(3))
+    }
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update) }
+
+    addEventListener('scroll', onScroll, { passive: true })
+    update()
+    return () => {
+      removeEventListener('scroll', onScroll)
+      cancelAnimationFrame(raf)
+      root.style.removeProperty('--hp')
+    }
+  }, [])
+
   return (
     <header className="sp" id="top">
       <canvas className="sp-stars" ref={canvasRef} aria-hidden="true" />
       <div className="sp-nebula" aria-hidden="true" />
-      <div className="sp-grid" aria-hidden="true" />
       <div className="sp-scan" aria-hidden="true" />
-      <div className="sp-frame" aria-hidden="true"><i /><i /><i /><i /></div>
 
       <div className="sp-copy">
-        <p className="sp-tag"><span className="sp-pulse" />Sys.online // Sector 07</p>
-
         <h1 className="sp-title">
           <span className="sp-hi">// Hi, I’m</span>
           <span className="sp-name" data-text="Your Name">Aakanksha</span>
@@ -130,15 +142,15 @@ export default function Hero() {
         </ul>
       </div>
 
-      <div className="sp-scene" aria-hidden="true">
-        <div className="sp-reticle" />
-        <div className="sp-reticle sp-reticle--b" />
+      <div className="sp-scene">
+        <div className="sp-reticle" aria-hidden="true" />
+        <div className="sp-reticle sp-reticle--b" aria-hidden="true" />
 
         <Orbit n={3} layer="back" />
         <Orbit n={2} layer="back" />
         <Orbit n={1} layer="back" />
 
-        <div className="sp-planet">
+        <div className="sp-planet" aria-hidden="true">
           <div className="sp-clouds" />
           <div className="sp-lat" />
           <div className="sp-shade" />
@@ -148,14 +160,21 @@ export default function Hero() {
         <Orbit n={2} layer="front" />
         <Orbit n={1} layer="front" />
 
-        <span className="sp-call sp-call--a">ORB-01<em>Project One · 2.1 AU</em></span>
-        <span className="sp-call sp-call--b">ORB-02<em>Project Two · 2.7 AU</em></span>
+        {projects.slice(0, 3).map((p, i) => (
+          <a
+            key={p.name}
+            className={`sp-call sp-call--${'abc'[i]}`}
+            href={`#project-${slug(p.name)}`}
+          >
+            {p.name}<em>{p.tags[0]}</em>
+          </a>
+        ))}
       </div>
 
       <div className="sp-hud">
-        <span>Mission clock <b>T+ {clock}</b></span>
         <a href="#projects">Scroll to dock ↓</a>
       </div>
     </header>
   )
 }
+

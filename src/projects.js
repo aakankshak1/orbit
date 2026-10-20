@@ -1,41 +1,36 @@
+// Edit this list to change the project cards.
+// kind: 'bars' | 'lines' | 'tabs'  -> picks the little preview graphic
+// image: optional path to a screenshot (e.g. '/projects/drug-agent.png', put the file in /public)
+// href:  link for the "read more" button (GitHub repo, demo, case study...)
 export const projects = [
   {
-    name: 'Project One',
-    pitch: 'A one-line pitch that says what it does and why it matters.',
-    tech: ['React', 'TypeScript', 'Tailwind'],
-    status: 'Live',
-    demo: null,
-    src: null,
-    color: '#8b5cf6',
-    r: 2.1,
-    tilt: 0.35,
-    speed: 0.45,
-    ph: 0,
+    name: 'Drug-Agent',
+    pitch:
+      'A molecular property prediction pipeline built around a two-agent LLM design.',
+    tags: ['machine learning', 'llm agents'],
+    kind: 'bars',
+    image: null,
+    href: null,
   },
   {
-    name: 'Project Two',
-    pitch: 'Another short pitch, focused on the problem you solved.',
-    tech: ['JavaScript', 'Three.js'],
-    status: 'In progress',
-    demo: null,
-    src: null,
-    color: '#38bdf8',
-    r: 2.7,
-    tilt: -0.5,
-    speed: 0.32,
-    ph: 2.2,
+    name: 'Process Supervisor',
+    pitch:
+      'A small C daemon that watches your programs and restarts them when they crash.',
+    tags: ['c', 'systems'],
+    kind: 'lines',
+    image: null,
+    href: null,
   },
   {
-    name: 'Project Three',
-    pitch: 'A third project that shows range, such as a data or UX piece.',
-    tech: ['React', 'Node', 'CSS'],
-    status: 'Coming soon',
-    demo: null,
-    src: null,
-    color: '#f472b6',
-    r: 3.3,
-    tilt: 0.15,
-    speed: 0.24,
-    ph: 4.3,
+    name: 'Tab Tamer',
+    pitch:
+      'A calm, privacy-first Chrome extension for keeping your tabs under control.',
+    tags: ['chrome extension', 'privacy'],
+    kind: 'tabs',
+    image: null,
+    href: null,
   },
 ]
+
+// 'Process Supervisor' -> 'process-supervisor' (used for in-page links)
+export const slug = name => name.toLowerCase().replace(/[^a-z0-9]+/g, '-')

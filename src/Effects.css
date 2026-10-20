@@ -1,0 +1,114 @@
+/* ================= EFFECTS: blends, glow, grain, hover ================= */
+
+/* ---------- Seams: glowing bridges between sections ---------- */
+.seam{position:relative;z-index:3;height:0;pointer-events:none}
+.seam::before{
+  content:"";position:absolute;left:0;right:0;top:-170px;height:340px;
+  background:
+    radial-gradient(46% 42% at 50% 50%,rgba(239,121,138,.26),transparent 72%),
+    radial-gradient(34% 36% at 16% 50%,rgba(125,130,184,.2),transparent 72%),
+    radial-gradient(36% 38% at 86% 50%,rgba(97,63,117,.42),transparent 72%);
+  filter:blur(10px);
+}
+.seam-line{
+  position:absolute;left:8%;right:8%;top:0;height:1px;overflow:hidden;
+  background:linear-gradient(90deg,transparent,rgba(239,121,138,.4) 20%,rgba(125,130,184,.4) 80%,transparent);
+  box-shadow:0 0 22px rgba(239,121,138,.45);
+}
+.seam-line i{
+  position:absolute;top:0;left:0;width:22%;height:100%;
+  background:linear-gradient(90deg,transparent,#f7a9a8,transparent);
+  animation:seam-run 6s ease-in-out infinite;
+}
+.seam-tag{
+  position:absolute;top:18px;left:50%;transform:translateX(-50%);
+  display:inline-flex;align-items:center;gap:10px;white-space:nowrap;
+  font:400 .68rem/1 var(--font-sub);letter-spacing:.28em;text-transform:uppercase;color:var(--ac2);
+}
+.seam-tag b{width:6px;height:6px;border-radius:50%;background:var(--ac);animation:sp-ping 1.8s infinite}
+@keyframes seam-run{from{transform:translateX(-100%)}to{transform:translateX(460%)}}
+
+/* ---------- Cursor light + film grain ---------- */
+.fx-cursor{
+  position:fixed;left:0;top:0;z-index:5;width:560px;height:560px;margin:-280px 0 0 -280px;
+  border-radius:50%;pointer-events:none;opacity:0;transition:opacity .4s ease;
+  background:radial-gradient(circle,rgba(239,121,138,.13),rgba(125,130,184,.06) 40%,transparent 68%);
+  will-change:transform;
+}
+.fx-grain{
+  position:fixed;inset:0;z-index:90;pointer-events:none;opacity:.045;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+@media (hover:none){.fx-cursor{display:none}}
+
+/* ---------- Cards: pointer spotlight + HUD corner brackets ---------- */
+.proj::before,.ct-card::before{
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s ease;
+  background:radial-gradient(420px circle at var(--px,50%) var(--py,50%),rgba(239,121,138,.2),transparent 62%);
+}
+.proj:hover::before,.ct-card:hover::before{opacity:1}
+.proj::after,.ct-card::after{
+  content:"";position:absolute;inset:10px;pointer-events:none;opacity:0;transition:opacity .3s ease;
+  background:
+    linear-gradient(var(--ac),var(--ac)) top left/14px 1px no-repeat,
+    linear-gradient(var(--ac),var(--ac)) top left/1px 14px no-repeat,
+    linear-gradient(var(--ac),var(--ac)) top right/14px 1px no-repeat,
+    linear-gradient(var(--ac),var(--ac)) top right/1px 14px no-repeat,
+    linear-gradient(var(--ac),var(--ac)) bottom left/14px 1px no-repeat,
+    linear-gradient(var(--ac),var(--ac)) bottom left/1px 14px no-repeat,
+    linear-gradient(var(--ac),var(--ac)) bottom right/14px 1px no-repeat,
+    linear-gradient(var(--ac),var(--ac)) bottom right/1px 14px no-repeat;
+}
+.proj:hover::after,.ct-card:hover::after{opacity:.85}
+
+/* ---------- Buttons: light sweep on hover ---------- */
+.nav-cta,.proj-btn{position:relative;overflow:hidden;isolation:isolate}
+.nav-cta::before,.proj-btn::before{
+  content:"";position:absolute;top:0;bottom:0;left:-60%;width:40%;z-index:-1;
+  background:linear-gradient(100deg,transparent,rgba(247,169,168,.4),transparent);
+  transform:skewX(-20deg);transition:left .6s ease;
+}
+.nav-cta:hover::before,.proj-btn:hover::before{left:120%}
+
+/* ---------- Projects: dot grid + shimmering title ---------- */
+.trans::before{
+  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background-image:radial-gradient(rgba(229,195,209,.16) 1px,transparent 1.2px);
+  background-size:30px 30px;
+  -webkit-mask-image:radial-gradient(75% 60% at 50% 38%,#000 0%,transparent 78%);
+  mask-image:radial-gradient(75% 60% at 50% 38%,#000 0%,transparent 78%);
+}
+.trans .projects-title{
+  background:linear-gradient(100deg,#f8ecef 0%,#e5c3d1 38%,#ef798a 50%,#e5c3d1 62%,#f8ecef 100%);
+  background-size:260% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:title-sheen 8s linear infinite;
+}
+@keyframes title-sheen{to{background-position:-260% 0}}
+
+/* ---------- About: photo drifts as you scroll (browsers that support it) ---------- */
+@supports (animation-timeline:view()){
+  .ab-photo{animation:ab-par linear both;animation-timeline:view()}
+  @keyframes ab-par{from{transform:scale(1.14) translateY(-3%)}to{transform:scale(1.02) translateY(3%)}}
+}
+
+/* ---------- Contact: slow orbit rings behind the heading ---------- */
+.ct-rings{
+  position:absolute;left:50%;top:32%;width:min(130vw,1100px);aspect-ratio:1;
+  transform:translate(-50%,-50%);z-index:-1;pointer-events:none;
+  -webkit-mask-image:radial-gradient(circle,#000 18%,transparent 68%);
+  mask-image:radial-gradient(circle,#000 18%,transparent 68%);
+}
+.ct-rings i{position:absolute;border-radius:50%;border:1px dashed rgba(125,130,184,.4);animation:sp-spin 90s linear infinite}
+.ct-rings i:nth-child(1){inset:0}
+.ct-rings i:nth-child(2){inset:15%;border-style:solid;border-color:rgba(239,121,138,.26);animation-duration:60s;animation-direction:reverse}
+.ct-rings i:nth-child(3){inset:31%;border-color:rgba(229,195,209,.24);animation-duration:120s}
+.ct-rings i::after{
+  content:"";position:absolute;top:0;left:50%;width:7px;height:7px;margin:-3.5px 0 0 -3.5px;
+  border-radius:50%;background:var(--ac);box-shadow:0 0 14px 3px var(--ac);
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion:reduce){
+  .seam-line i,.seam-tag b,.trans .projects-title,.ct-rings i,.ab-photo{animation:none}
+  .fx-cursor{display:none}
+}
