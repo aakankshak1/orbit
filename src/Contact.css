@@ -3,7 +3,7 @@
   position:relative;isolation:isolate;overflow:hidden;
   min-height:calc(100vh - 62px);min-height:calc(100svh - 62px);
   display:flex;flex-direction:column;justify-content:space-between;gap:64px;
-  padding:clamp(48px,6vw,88px) clamp(24px,6vw,88px) 28px;
+  padding:var(--section-gap) clamp(24px,6vw,88px) 28px;
   background:linear-gradient(180deg,#190f1f 0%,#2b1636 40%,#190f1f 74%,#0e0713 100%);
 }
 /* stars */

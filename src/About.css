@@ -3,8 +3,10 @@
 
 .about2{
   position:relative;isolation:isolate;overflow:hidden;text-transform:lowercase;
-  /* big bottom padding: the projects section's glow rises underneath this one */
-  padding:0 0 clamp(180px,30vh,320px);
+  display:flex;flex-direction:column;
+  /* one screen: the photo, the writing and the tech ticker fit together at 100% zoom */
+  min-height:calc(100vh - 62px);min-height:calc(100svh - 62px);
+  padding:0;
   color:var(--tx,#f8ecef);
 }
 
@@ -21,25 +23,26 @@
 
 /* ---------- photo on the left edge, writing on the right ---------- */
 .ab2-main{
-  position:relative;
-  padding:clamp(60px,7vw,100px) clamp(20px,5vw,64px) 0 0;
-  /* always tall enough for the photo at its natural shape (1206 x 1578) */
-  min-height:calc(min(48vw,720px) * 1.3085);
+  position:relative;flex:1;display:flex;align-items:center;
+  box-sizing:border-box;
+  padding:clamp(12px,3vh,36px) clamp(20px,5vw,64px) 0 0;
 }
 
-/* the photo fills the left of the screen and dissolves into the page:
-   the wrapper fades it out to the right, the image fades it out at the top and bottom */
+/* the photo fills the left of the screen and dissolves into the page */
 .ab2-photo{
-  position:absolute;left:0;top:0;width:min(48%,720px);aspect-ratio:1206/1578;
-  -webkit-mask-image:linear-gradient(90deg,#000 64%,transparent 100%);
-  mask-image:linear-gradient(90deg,#000 64%,transparent 100%);
+  position:absolute;left:0;top:0;bottom:0;width:min(44%,660px);overflow:hidden;
+  /* fades out on the right, the top and the bottom, so it melts into the page */
+  -webkit-mask-image:linear-gradient(90deg,#000 38%,rgba(0,0,0,.85) 52%,rgba(0,0,0,.55) 68%,rgba(0,0,0,.2) 84%,transparent 100%),linear-gradient(180deg,transparent 0%,rgba(0,0,0,.12) 8%,rgba(0,0,0,.45) 17%,rgba(0,0,0,.8) 27%,#000 36%,#000 78%,rgba(0,0,0,.6) 90%,transparent 100%);
+  -webkit-mask-composite:source-in;
+  mask-image:linear-gradient(90deg,#000 38%,rgba(0,0,0,.85) 52%,rgba(0,0,0,.55) 68%,rgba(0,0,0,.2) 84%,transparent 100%),linear-gradient(180deg,transparent 0%,rgba(0,0,0,.12) 8%,rgba(0,0,0,.45) 17%,rgba(0,0,0,.8) 27%,#000 36%,#000 78%,rgba(0,0,0,.6) 90%,transparent 100%);
+  mask-composite:intersect;
 }
 .ab2-photo img{
-  display:block;width:100%;height:100%;object-fit:cover;object-position:center top;
+  /* fills the box and keeps her in view: the empty cloth at the top of the photo is cropped off */
+  position:absolute;inset:0;display:block;width:100%;height:100%;
+  object-fit:cover;object-position:center 52%;
   /* the photo is decoration: it can't be dragged or selected */
   -webkit-user-drag:none;user-select:none;-webkit-user-select:none;
-  -webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 8%,#000 90%,transparent 100%);
-  mask-image:linear-gradient(180deg,transparent 0%,#000 8%,#000 90%,transparent 100%);
 }
 .ab2-ph{
   width:100%;height:100%;
@@ -47,8 +50,8 @@
 }
 
 .ab2-content{
-  position:relative;width:min(54%,860px);margin-left:auto;
-  display:grid;gap:clamp(40px,5vw,72px);
+  position:relative;width:min(50%,800px);margin-left:auto;
+  display:grid;gap:clamp(16px,3.2vh,44px);
 }
 
 /* ---------- introduction ---------- */
@@ -58,34 +61,35 @@
 }
 .ab2-title{
   margin:0;
-  font:var(--w-heading) clamp(3.2rem,7.2vw,6.6rem)/.9 var(--font-heading);
+  /* sized by the screen's height as well as its width, so everything fits on one screen */
+  font:var(--w-heading) clamp(2.4rem,min(5.2vw,9.5vh),5.6rem)/.9 var(--font-heading);
   letter-spacing:-.01em;text-transform:lowercase;
   background:linear-gradient(180deg,#fff7f9 0%,#e5c3d1 55%,#ef798a 100%);
   -webkit-background-clip:text;background-clip:text;color:transparent;
 }
 .ab2-title span{-webkit-text-fill-color:var(--ac,#ef798a)}
 .ab2-text p{
-  margin:0 0 1em;
-  font:var(--w-body) clamp(1rem,1.1vw,1.08rem)/1.75 var(--font-body);color:var(--mu,#cdaabd);
+  margin:0 0 .8em;
+  font:var(--w-body) clamp(.88rem,calc(.7vw + .75vh),1.35rem)/1.6 var(--font-body);color:var(--mu,#cdaabd);
 }
 .ab2-text p:last-child{margin-bottom:0}
-.ab2-intro .ab2-text{margin-top:clamp(24px,3vw,36px)}
+.ab2-intro .ab2-text{margin-top:clamp(12px,2vh,28px)}
 
 /* ---------- beyond the screen ---------- */
 .ab2-tile{position:relative}
 .ab2-h3{
-  margin:0 0 22px;
-  font:var(--w-heading) clamp(1.9rem,3vw,2.8rem)/1 var(--font-heading);text-transform:lowercase;
+  margin:0 0 clamp(10px,1.8vh,20px);
+  font:var(--w-heading) clamp(1.4rem,min(2.4vw,4.4vh),2.6rem)/1 var(--font-heading);text-transform:lowercase;
 }
 .ab2-h3 span{color:var(--ac,#ef798a)}
 .ab2-tile--beyond .ab2-text{columns:2;column-gap:clamp(24px,3vw,48px)}
-.ab2-tile--beyond .ab2-text p{break-inside:avoid;margin:0 0 1em}
+.ab2-tile--beyond .ab2-text p{break-inside:avoid;margin:0 0 .8em}
 .ab2-tile--beyond .ab2-text p:last-child{margin-bottom:0}
 
 /* ---------- tech stack ticker, full width of the screen ---------- */
 .ab2-marquee{
-  margin-top:clamp(56px,7vw,100px);
-  overflow:hidden;padding:clamp(18px,2.4vw,30px) 0;
+  margin-top:clamp(12px,2.5vh,32px);
+  overflow:hidden;padding:clamp(10px,1.6vw,18px) 0;
   border-block:1px solid rgba(229,195,209,.12);
   -webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);
   mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);
@@ -97,7 +101,7 @@
 .ab2-marquee:hover .ab2-track{animation-play-state:paused}
 .ab2-track li{
   display:flex;align-items:center;white-space:nowrap;
-  font:var(--w-heading) clamp(2.4rem,5.2vw,4.8rem)/1 var(--font-heading);
+  font:var(--w-heading) clamp(1.6rem,min(3.2vw,6vh),3.2rem)/1 var(--font-heading);
   color:transparent;-webkit-text-stroke:1px rgba(229,195,209,.6);
 }
 .ab2-track li.is-solid{color:var(--ac2,#f7a9a8);-webkit-text-stroke:0}
@@ -109,13 +113,20 @@
 
 /* ---------- smaller screens: photo becomes a banner on top ---------- */
 @media (max-width:900px){
-  .ab2-main{padding:clamp(70px,14vw,110px) 0 0;min-height:0}
+  .about2{min-height:0}
+  .ab2-main{display:block;padding:clamp(70px,14vw,110px) 0 0}
   .ab2-photo{
-    position:relative;left:auto;top:auto;
-    width:100%;aspect-ratio:1206/1578;max-height:640px;margin-bottom:-50px;
-    -webkit-mask-image:none;mask-image:none;
+    position:relative;left:auto;top:auto;bottom:auto;
+    width:100%;height:min(100vw,520px);margin-bottom:-50px;
+    -webkit-mask-image:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.45) 12%,#000 28%,#000 66%,transparent 100%);
+    mask-image:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.45) 12%,#000 28%,#000 66%,transparent 100%);
   }
-  .ab2-content{width:auto;margin:0;padding:0 clamp(20px,5vw,40px)}
+  .ab2-content{width:auto;margin:0;padding:0 clamp(20px,5vw,40px);gap:44px}
+  .ab2-title{font-size:clamp(2.8rem,12vw,4.5rem)}
+  .ab2-text p{font-size:1.05rem}
+  .ab2-h3{font-size:1.8rem}
+  .ab2-marquee{margin-top:56px}
+  .ab2-track li{font-size:clamp(2rem,9vw,3rem)}
 }
 @media (max-width:640px){
   .ab2-tile--beyond .ab2-text{columns:1}
