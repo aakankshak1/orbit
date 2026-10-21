@@ -1165,7 +1165,7 @@ footer {
 
 /* ================= ABOUT ================= */
 .about-sec{
-  --font-display:'Fira Sans Extra Condensed','Arial Narrow',sans-serif;
+  --font-display:var(--font-heading);
   --ab-ink:#f8ecef;--ab-mute:#cdaabd;
   --ab-size:clamp(1rem,1.2vw,1.15rem); /* one size for the sentence and the paragraphs */
   margin:0;padding:0;
@@ -1271,40 +1271,42 @@ footer {
 .ab-mini .pill:hover{border-color:var(--ac)}
 
 .ab-title{
-  margin:clamp(72px,9vw,128px) 0 0;
-  font:300 clamp(3.4rem,7vw,6.5rem)/.9 var(--font-display);
-  letter-spacing:-.01em;text-transform:lowercase;color:var(--ab-ink);
+  margin:clamp(48px,6vw,88px) 0 0;
+  font:var(--w-heading) clamp(3.2rem,6.4vw,6rem)/.95 var(--font-display);
+  letter-spacing:0;text-transform:lowercase;color:var(--ab-ink);
 }
-/* keep the heading lowercase except the capital A in "About me." */
-.ab-title::first-letter{text-transform:uppercase}
+/* one column: big intro sentence first, then the paragraphs as a single readable block */
 .ab-cols{
-  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
-  gap:clamp(24px,4vw,56px);margin:clamp(40px,6vw,76px) 0 clamp(36px,5vw,60px);
+  display:flex;flex-direction:column;gap:clamp(22px,2.6vw,32px);
+  margin:clamp(28px,4vw,48px) 0 clamp(48px,6vw,80px);
   padding-right:clamp(24px,3.6vw,56px);
 }
 .ab-lead{
-  margin:0;font:300 var(--ab-size)/1.7 var(--font-sub);
-  letter-spacing:.01em;color:var(--ab-ink);
+  max-width:34ch;margin:0;
+  font:var(--w-sub) clamp(1.35rem,2vw,1.8rem)/1.4 var(--font-sub);
+  letter-spacing:0;color:var(--ab-ink);
 }
-.ab-text p{margin:0 0 20px;font:400 var(--ab-size)/1.7 var(--font-body);color:var(--ab-mute)}
+.ab-text{
+  max-width:58ch;padding-left:clamp(18px,2vw,26px);
+  border-left:1px solid rgba(239,121,138,.55);
+}
+.ab-text p{margin:0 0 1.1em;font:var(--w-body) 1.08rem/1.75 var(--font-body);color:var(--ab-mute)}
 .ab-text p:last-child{margin-bottom:0}
 
-/* tech stack */
-.ab-stack{margin:auto 0 0;padding:0 clamp(24px,3.6vw,56px) clamp(90px,10vw,140px) 0}
-.ab-stack-title{
-  margin:0 0 24px;
-  font:300 clamp(3rem,5.4vw,5rem)/1 var(--font-display);
-  letter-spacing:-.005em;text-transform:lowercase;color:var(--ab-ink);
-}
-.ab-stack ul{display:flex;flex-wrap:wrap;gap:10px;margin:0;padding:0;list-style:none}
-.ab-stack li{
+/* tech stack + beyond the screen */
+.ab-stack{margin:auto 0 0;padding:0 clamp(24px,3.6vw,56px) 0 0}
+.ab-beyond{margin:clamp(44px,5vw,72px) 0 0;padding:0 clamp(24px,3.6vw,56px) clamp(90px,10vw,140px) 0}
+.ab-stack-title{margin:0 0 24px;font:var(--w-heading) clamp(2.2rem,3.6vw,3.2rem)/1 var(--font-display);letter-spacing:0;text-transform:lowercase;color:var(--ab-ink)}
+.ab-beyond .ab-text{margin:0 0 28px}
+.ab-chips{display:flex;flex-wrap:wrap;gap:10px;margin:0;padding:0;list-style:none}
+.ab-chips li{
   padding:10px 20px;border:1px solid rgba(229,195,209,.3);border-radius:999px;
   font:400 .84rem/1.2 var(--font-sub);letter-spacing:.06em;text-transform:lowercase;color:var(--ab-ink);
   transition:background .2s,color .2s,border-color .2s;
 }
-.ab-stack li:first-child{background:var(--ac);border-color:var(--ac);color:#190f1f}
-.ab-stack li:hover{background:rgba(248,236,239,.08);border-color:var(--ac2)}
-.ab-stack li:first-child:hover{background:var(--ac2);border-color:var(--ac2);color:#190f1f}
+.ab-chips li:hover{background:rgba(248,236,239,.08);border-color:var(--ac2)}
+.ab-stack .ab-chips li:first-child{background:var(--ac);border-color:var(--ac);color:#190f1f}
+.ab-stack .ab-chips li:first-child:hover{background:var(--ac2);border-color:var(--ac2);color:#190f1f}
 
 @media (max-width:860px){
   .ab-card{grid-template-columns:1fr}
@@ -1313,7 +1315,7 @@ footer {
   .ab-body{padding-left:clamp(20px,5vw,32px)}
   .ab-mini{justify-content:flex-start;padding-right:clamp(20px,5vw,32px)}
   .ab-cols{grid-template-columns:1fr;padding-right:clamp(20px,5vw,32px)}
-  .ab-stack{padding-right:clamp(20px,5vw,32px)}
+  .ab-stack,.ab-beyond{padding-right:clamp(20px,5vw,32px)}
 }
 @media (prefers-reduced-motion:reduce){
   .ab-planet,.ab-orbit i{animation:none}

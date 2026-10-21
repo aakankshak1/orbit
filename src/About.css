@@ -1,0 +1,128 @@
+/* ================= ABOUT ================= */
+/* Uses the site's own font and colour variables, so it follows the rest of the page. */
+
+.about2{
+  position:relative;isolation:isolate;overflow:hidden;text-transform:lowercase;
+  /* big bottom padding: the projects section's glow rises underneath this one */
+  padding:0 0 clamp(180px,30vh,320px);
+  color:var(--tx,#f8ecef);
+}
+
+/* soft colour glows behind everything, fading in and out at the top and bottom */
+.ab2-bg{
+  position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(44% 34% at 8% 20%,rgba(239,121,138,.22),transparent 70%),
+    radial-gradient(48% 38% at 94% 38%,rgba(97,63,117,.6),transparent 72%),
+    radial-gradient(40% 28% at 52% 74%,rgba(125,130,184,.16),transparent 70%);
+  -webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 16%,#000 78%,transparent 100%);
+  mask-image:linear-gradient(180deg,transparent 0%,#000 16%,#000 78%,transparent 100%);
+}
+
+/* ---------- photo on the left edge, writing on the right ---------- */
+.ab2-main{
+  position:relative;
+  padding:clamp(60px,7vw,100px) clamp(20px,5vw,64px) 0 0;
+  /* always tall enough for the photo at its natural shape (1206 x 1578) */
+  min-height:calc(min(48vw,720px) * 1.3085);
+}
+
+/* the photo fills the left of the screen and dissolves into the page:
+   the wrapper fades it out to the right, the image fades it out at the top and bottom */
+.ab2-photo{
+  position:absolute;left:0;top:0;width:min(48%,720px);aspect-ratio:1206/1578;
+  -webkit-mask-image:linear-gradient(90deg,#000 64%,transparent 100%);
+  mask-image:linear-gradient(90deg,#000 64%,transparent 100%);
+}
+.ab2-photo img{
+  display:block;width:100%;height:100%;object-fit:cover;object-position:center top;
+  /* the photo is decoration: it can't be dragged or selected */
+  -webkit-user-drag:none;user-select:none;-webkit-user-select:none;
+  -webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 8%,#000 90%,transparent 100%);
+  mask-image:linear-gradient(180deg,transparent 0%,#000 8%,#000 90%,transparent 100%);
+}
+.ab2-ph{
+  width:100%;height:100%;
+  background:radial-gradient(60% 50% at 40% 40%,rgba(239,121,138,.55),rgba(97,63,117,.6) 55%,transparent 100%);
+}
+
+.ab2-content{
+  position:relative;width:min(54%,860px);margin-left:auto;
+  display:grid;gap:clamp(40px,5vw,72px);
+}
+
+/* ---------- introduction ---------- */
+.ab2-kicker{
+  margin:0 0 14px;
+  font:400 .8rem/1 var(--font-sub);letter-spacing:.22em;color:var(--ac2,#f7a9a8);
+}
+.ab2-title{
+  margin:0;
+  font:var(--w-heading) clamp(3.2rem,7.2vw,6.6rem)/.9 var(--font-heading);
+  letter-spacing:-.01em;text-transform:lowercase;
+  background:linear-gradient(180deg,#fff7f9 0%,#e5c3d1 55%,#ef798a 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.ab2-title span{-webkit-text-fill-color:var(--ac,#ef798a)}
+.ab2-text p{
+  margin:0 0 1em;
+  font:var(--w-body) clamp(1rem,1.1vw,1.08rem)/1.75 var(--font-body);color:var(--mu,#cdaabd);
+}
+.ab2-text p:last-child{margin-bottom:0}
+.ab2-intro .ab2-text{margin-top:clamp(24px,3vw,36px)}
+
+/* ---------- beyond the screen ---------- */
+.ab2-tile{position:relative}
+.ab2-h3{
+  margin:0 0 22px;
+  font:var(--w-heading) clamp(1.9rem,3vw,2.8rem)/1 var(--font-heading);text-transform:lowercase;
+}
+.ab2-h3 span{color:var(--ac,#ef798a)}
+.ab2-tile--beyond .ab2-text{columns:2;column-gap:clamp(24px,3vw,48px)}
+.ab2-tile--beyond .ab2-text p{break-inside:avoid;margin:0 0 1em}
+.ab2-tile--beyond .ab2-text p:last-child{margin-bottom:0}
+
+/* ---------- tech stack ticker, full width of the screen ---------- */
+.ab2-marquee{
+  margin-top:clamp(56px,7vw,100px);
+  overflow:hidden;padding:clamp(18px,2.4vw,30px) 0;
+  border-block:1px solid rgba(229,195,209,.12);
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);
+}
+.ab2-track{
+  display:flex;width:max-content;margin:0;padding:0;list-style:none;
+  animation:ab2-marquee 70s linear infinite;
+}
+.ab2-marquee:hover .ab2-track{animation-play-state:paused}
+.ab2-track li{
+  display:flex;align-items:center;white-space:nowrap;
+  font:var(--w-heading) clamp(2.4rem,5.2vw,4.8rem)/1 var(--font-heading);
+  color:transparent;-webkit-text-stroke:1px rgba(229,195,209,.6);
+}
+.ab2-track li.is-solid{color:var(--ac2,#f7a9a8);-webkit-text-stroke:0}
+.ab2-track li::after{
+  content:"✦";margin:0 clamp(20px,3vw,44px);
+  font-size:.4em;color:var(--ac,#ef798a);-webkit-text-stroke:0;
+}
+@keyframes ab2-marquee{to{transform:translateX(-50%)}}
+
+/* ---------- smaller screens: photo becomes a banner on top ---------- */
+@media (max-width:900px){
+  .ab2-main{padding:clamp(70px,14vw,110px) 0 0;min-height:0}
+  .ab2-photo{
+    position:relative;left:auto;top:auto;
+    width:100%;aspect-ratio:1206/1578;max-height:640px;margin-bottom:-50px;
+    -webkit-mask-image:none;mask-image:none;
+  }
+  .ab2-content{width:auto;margin:0;padding:0 clamp(20px,5vw,40px)}
+}
+@media (max-width:640px){
+  .ab2-tile--beyond .ab2-text{columns:1}
+}
+
+/* ---------- reduced motion: no ticker ---------- */
+@media (prefers-reduced-motion:reduce){
+  .ab2-track{animation:none;width:auto;flex-wrap:wrap;row-gap:8px;padding:0 clamp(20px,5vw,64px)}
+  .ab2-track li[aria-hidden]{display:none}
+}

@@ -44,14 +44,34 @@ function Icon({ name }) {
   )
 }
 
+const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches
+
+// Cards: a spotlight that follows the mouse, and a gentle 3D tilt.
+function tilt(e) {
+  if (e.pointerType !== 'mouse' || reduceMotion()) return
+  const c = e.currentTarget
+  const r = c.getBoundingClientRect()
+  const x = e.clientX - r.left
+  const y = e.clientY - r.top
+  c.style.setProperty('--px', `${x}px`)
+  c.style.setProperty('--py', `${y}px`)
+  c.style.setProperty('--rx', `${(y / r.height - 0.5) * -9}deg`)
+  c.style.setProperty('--ry', `${(x / r.width - 0.5) * 9}deg`)
+}
+function untilt(e) {
+  const c = e.currentTarget
+  c.style.setProperty('--rx', '0deg')
+  c.style.setProperty('--ry', '0deg')
+}
+
 export default function Contact() {
   const rootRef = useRef(null)
   const canvasRef = useRef(null)
 
-  // same fade-up reveal as the About section
+  // fade-up reveal (replays every time you scroll to it)
   useEffect(() => {
     const root = rootRef.current
-    if (!root || matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    if (!root || reduceMotion()) return
 
     const items = root.querySelectorAll('.ct-kicker, .ct-title, .ct-lead, .ct-card, .ct-actions')
     items.forEach((el, i) => {
@@ -71,144 +91,131 @@ export default function Contact() {
     return () => io.disconnect()
   }, [])
 
-  // interactive constellation behind the heading: drifting stars that link up with each other,
-  // reach toward the cursor / finger, and a click or tap adds a new star
+  // constellation: drifting nodes joined by lines, reacting to the mouse
   useEffect(() => {
+    const root = rootRef.current
     const canvas = canvasRef.current
-    const sec = rootRef.current
-    if (!canvas || !sec) return
+    if (!root || !canvas) return
     const ctx = canvas.getContext('2d')
-    const calm = matchMedia('(prefers-reduced-motion: reduce)').matches
-    const COLORS = ['229,195,209', '239,121,138', '125,130,184']
-    const mouse = { x: -9999, y: -9999 }
-    let w = 0, h = 0, link = 120, reach = 180, target = 40
-    let nodes = [], raf = 0, visible = true, t = 0
+    if (!ctx) return
 
-    const make = (x, y, burst = 0) => {
-      const a = Math.random() * Math.PI * 2
-      const s = burst || Math.random() * 0.22 + 0.04
-      return {
-        x: x ?? Math.random() * w, y: y ?? Math.random() * h,
-        vx: Math.cos(a) * s, vy: Math.sin(a) * s,
-        r: Math.random() * 1.3 + 0.8,
-        c: COLORS[(Math.random() * COLORS.length) | 0],
-        tw: Math.random() * Math.PI * 2,
-      }
-    }
+    const calm = reduceMotion()
+    let w = 0, h = 0, nodes = [], raf = 0, inView = true
+    const pointer = { x: 0, y: 0, on: false }
 
-    function resize() {
-      const dpr = Math.min(devicePixelRatio || 1, 2)
-      w = sec.clientWidth
-      h = sec.clientHeight
-      canvas.width = w * dpr
-      canvas.height = h * dpr
+    const build = () => {
+      const r = root.getBoundingClientRect()
+      w = r.width
+      h = r.height
+      const dpr = Math.min(window.devicePixelRatio || 1, 2)
+      canvas.width = Math.round(w * dpr)
+      canvas.height = Math.round(h * dpr)
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
-      // everything scales with the screen: fewer, tighter links on phones
-      link = Math.max(80, Math.min(150, w / 9))
-      reach = link * 1.5
-      target = Math.min(110, Math.max(26, Math.round((w * h) / 13000)))
-      if (nodes.length > target + 20) nodes.length = target + 20
-      while (nodes.length < target) nodes.push(make())
-      nodes.forEach(p => { p.x = Math.min(p.x, w); p.y = Math.min(p.y, h) })
-      draw()
+      const count = Math.min(w < 700 ? 38 : 80, Math.round((w * h) / 16000))
+      nodes = Array.from({ length: count }, (_, i) => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        r: Math.random() * 1.4 + 0.7,
+        pink: i % 4 === 0,
+      }))
     }
 
-    function step() {
-      for (const p of nodes) {
-        const dx = mouse.x - p.x, dy = mouse.y - p.y
-        const d = Math.hypot(dx, dy)
-        if (d < reach && d > 1) {
-          // gentle pull toward the pointer, but never right on top of it
-          const f = (1 - d / reach) * 0.035 * (d > 60 ? 1 : -1)
-          p.vx += (dx / d) * f
-          p.vy += (dy / d) * f
-        }
-        const sp = Math.hypot(p.vx, p.vy)
-        if (sp > 0.7) { p.vx *= 0.7 / sp; p.vy *= 0.7 / sp }
-        p.x += p.vx
-        p.y += p.vy
-        if (p.x < 0 || p.x > w) { p.vx *= -1; p.x = Math.min(Math.max(p.x, 0), w) }
-        if (p.y < 0 || p.y > h) { p.vy *= -1; p.y = Math.min(Math.max(p.y, 0), h) }
-      }
-      // extra stars from clicks slowly fade back out so it never gets crowded
-      if (nodes.length > target && t % 90 === 0) nodes.shift()
-    }
-
-    function draw() {
+    const draw = () => {
+      const link = w < 700 ? 110 : 150
+      const reach = 190
       ctx.clearRect(0, 0, w, h)
 
-      ctx.lineWidth = 1
+      for (const n of nodes) {
+        if (!calm) {
+          n.x += n.vx
+          n.y += n.vy
+          if (n.x < 0 || n.x > w) n.vx *= -1
+          if (n.y < 0 || n.y > h) n.vy *= -1
+          if (pointer.on) {
+            // nodes lean gently toward the cursor
+            const dx = pointer.x - n.x, dy = pointer.y - n.y
+            if (dx * dx + dy * dy < reach * reach) { n.x += dx * 0.003; n.y += dy * 0.003 }
+          }
+        }
+      }
+
+      ctx.lineWidth = 0.8
       for (let i = 0; i < nodes.length; i++) {
         const a = nodes[i]
         for (let j = i + 1; j < nodes.length; j++) {
           const b = nodes[j]
-          const d = Math.hypot(a.x - b.x, a.y - b.y)
-          if (d < link) {
-            ctx.strokeStyle = `rgba(229,195,209,${((1 - d / link) * 0.28).toFixed(3)})`
-            ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke()
+          const dx = a.x - b.x, dy = a.y - b.y
+          const d2 = dx * dx + dy * dy
+          if (d2 < link * link) {
+            ctx.strokeStyle = `rgba(229,195,209,${(1 - Math.sqrt(d2) / link) * 0.3})`
+            ctx.beginPath()
+            ctx.moveTo(a.x, a.y)
+            ctx.lineTo(b.x, b.y)
+            ctx.stroke()
           }
         }
-        const dm = Math.hypot(a.x - mouse.x, a.y - mouse.y)
-        if (dm < reach) {
-          ctx.strokeStyle = `rgba(239,121,138,${((1 - dm / reach) * 0.6).toFixed(3)})`
-          ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(mouse.x, mouse.y); ctx.stroke()
+        if (pointer.on) {
+          const dx = a.x - pointer.x, dy = a.y - pointer.y
+          const d2 = dx * dx + dy * dy
+          if (d2 < reach * reach) {
+            ctx.strokeStyle = `rgba(239,121,138,${(1 - Math.sqrt(d2) / reach) * 0.7})`
+            ctx.beginPath()
+            ctx.moveTo(a.x, a.y)
+            ctx.lineTo(pointer.x, pointer.y)
+            ctx.stroke()
+          }
         }
       }
 
-      for (const p of nodes) {
-        const tw = calm ? 0.8 : 0.55 + 0.45 * Math.sin(t * 0.03 + p.tw)
-        ctx.fillStyle = `rgba(${p.c},${tw.toFixed(3)})`
-        ctx.shadowColor = `rgba(${p.c},.8)`
-        ctx.shadowBlur = 8
-        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill()
+      for (const n of nodes) {
+        let r = n.r
+        if (pointer.on) {
+          const dx = n.x - pointer.x, dy = n.y - pointer.y
+          if (dx * dx + dy * dy < reach * reach) r *= 1.6
+        }
+        ctx.fillStyle = n.pink ? 'rgba(247,169,168,.9)' : 'rgba(229,195,209,.8)'
+        ctx.beginPath()
+        ctx.arc(n.x, n.y, r, 0, Math.PI * 2)
+        ctx.fill()
       }
-      ctx.shadowBlur = 0
     }
 
-    function frame() {
+    const loop = () => { draw(); raf = requestAnimationFrame(loop) }
+    const update = () => {
+      cancelAnimationFrame(raf)
       raf = 0
-      t++
-      step()
-      draw()
-      if (visible && !calm) raf = requestAnimationFrame(frame)
+      if (calm) { draw(); return }
+      if (inView && !document.hidden) raf = requestAnimationFrame(loop)
     }
-    const start = () => { if (!raf && visible && !calm) raf = requestAnimationFrame(frame) }
 
-    const setPointer = e => {
-      const r = sec.getBoundingClientRect()
-      mouse.x = e.clientX - r.left
-      mouse.y = e.clientY - r.top
+    const onMove = e => {
+      const r = root.getBoundingClientRect()
+      pointer.x = e.clientX - r.left
+      pointer.y = e.clientY - r.top
+      pointer.on = e.pointerType === 'mouse'
       if (calm) draw()
     }
-    const clearPointer = () => { mouse.x = mouse.y = -9999; if (calm) draw() }
-    const addStar = e => {
-      if (e.target.closest && e.target.closest('a, button')) return
-      setPointer(e)
-      nodes.push(make(mouse.x, mouse.y, 0.5))
-      if (calm) draw()
-    }
+    const onLeave = () => { pointer.on = false; if (calm) draw() }
 
-    sec.addEventListener('pointermove', setPointer, { passive: true })
-    sec.addEventListener('pointerleave', clearPointer)
-    sec.addEventListener('pointerup', e => { if (e.pointerType === 'touch') clearPointer() })
-    sec.addEventListener('pointerdown', addStar)
-
-    const ro = new ResizeObserver(resize)
-    ro.observe(sec)
-    // only animate while the section is on screen
-    const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible) start() })
-    io.observe(sec)
-
-    resize()
-    start()
+    build()
+    update()
+    const ro = new ResizeObserver(() => { build(); if (calm) draw() })
+    ro.observe(root)
+    const io = new IntersectionObserver(([en]) => { inView = en.isIntersecting; update() })
+    io.observe(root)
+    root.addEventListener('pointermove', onMove)
+    root.addEventListener('pointerleave', onLeave)
+    document.addEventListener('visibilitychange', update)
 
     return () => {
       cancelAnimationFrame(raf)
       ro.disconnect()
       io.disconnect()
-      sec.removeEventListener('pointermove', setPointer)
-      sec.removeEventListener('pointerleave', clearPointer)
-      sec.removeEventListener('pointerdown', addStar)
+      root.removeEventListener('pointermove', onMove)
+      root.removeEventListener('pointerleave', onLeave)
+      document.removeEventListener('visibilitychange', update)
     }
   }, [])
 
@@ -229,6 +236,8 @@ export default function Contact() {
               href={s.url}
               {...(s.url.startsWith('https://') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
               aria-label={`${s.name}, ${s.handle}${s.url.startsWith('https://') ? ' (opens in a new tab)' : ''}`}
+              onPointerMove={tilt}
+              onPointerLeave={untilt}
             >
               <span className="ct-icon"><Icon name={s.icon} /></span>
               <span className="ct-name">{s.name}</span>
@@ -237,7 +246,6 @@ export default function Contact() {
             </a>
           ))}
         </div>
-
       </div>
 
       <div className="ct-foot">
