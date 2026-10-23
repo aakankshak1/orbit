@@ -1171,7 +1171,8 @@ footer {
 .about-sec{
   --font-display:var(--font-heading);
   --ab-ink:#f8ecef;--ab-mute:#cdaabd;
-  --ab-size:clamp(1rem,1.2vw,1.15rem); /* one size for the sentence and the paragraphs */
+  --ab-gap:clamp(72px,8vw,112px); /* space between the three blocks */
+  scroll-margin-top:40px; /* anchor jumps land this much lower under the nav */
   margin:0;padding:0;
 }
 .ab-card{
@@ -1249,7 +1250,7 @@ footer {
 
 /* right: light panel with the big serif heading */
 .ab-body{
-  display:flex;flex-direction:column;color:var(--ab-ink);text-transform:lowercase;
+  display:flex;flex-direction:column;color:var(--ab-ink);text-transform:none;
   padding:clamp(24px,3vw,40px) 0 0 clamp(24px,3.6vw,56px);
   background:
     radial-gradient(55% 50% at 100% 100%,rgba(239,121,138,.2),transparent 70%),
@@ -1275,37 +1276,37 @@ footer {
 .ab-mini .pill:hover{border-color:var(--ac)}
 
 .ab-title{
-  margin:clamp(48px,6vw,88px) 0 0;
+  margin:clamp(56px,6vw,96px) 0 0;
   font:var(--w-heading) clamp(3.2rem,6.4vw,6rem)/.95 var(--font-display);
-  letter-spacing:0;text-transform:lowercase;color:var(--ab-ink);
+  letter-spacing:0;text-transform:none;color:var(--ab-ink);
 }
 /* one column: big intro sentence first, then the paragraphs as a single readable block */
 .ab-cols{
   display:flex;flex-direction:column;gap:clamp(22px,2.6vw,32px);
-  margin:clamp(28px,4vw,48px) 0 clamp(48px,6vw,80px);
+  margin:clamp(32px,4vw,52px) 0 var(--ab-gap);
   padding-right:clamp(24px,3.6vw,56px);
 }
 .ab-lead{
-  max-width:34ch;margin:0;
-  font:var(--w-sub) clamp(1.35rem,2vw,1.8rem)/1.4 var(--font-sub);
+  max-width:36ch;margin:0;
+  font:var(--w-sub) clamp(1.6rem,2.5vw,2.2rem)/1.4 var(--font-sub);
   letter-spacing:0;color:var(--ab-ink);
 }
 .ab-text{
-  max-width:58ch;padding-left:clamp(18px,2vw,26px);
+  max-width:62ch;padding-left:clamp(18px,2vw,26px);
   border-left:1px solid rgba(239,121,138,.55);
 }
-.ab-text p{margin:0 0 1.1em;font:var(--w-body) 1.08rem/1.75 var(--font-body);color:var(--ab-mute)}
+.ab-text p{margin:0 0 1.2em;font:var(--w-body) clamp(1.15rem,1.4vw,1.3rem)/1.75 var(--font-body);color:var(--ab-mute)}
 .ab-text p:last-child{margin-bottom:0}
 
 /* tech stack + beyond the screen */
-.ab-stack{margin:auto 0 0;padding:0 clamp(24px,3.6vw,56px) 0 0}
-.ab-beyond{margin:clamp(44px,5vw,72px) 0 0;padding:0 clamp(24px,3.6vw,56px) clamp(90px,10vw,140px) 0}
-.ab-stack-title{margin:0 0 24px;font:var(--w-heading) clamp(2.2rem,3.6vw,3.2rem)/1 var(--font-display);letter-spacing:0;text-transform:lowercase;color:var(--ab-ink)}
-.ab-beyond .ab-text{margin:0 0 28px}
+.ab-stack{margin:0;padding:0 clamp(24px,3.6vw,56px) 0 0}
+.ab-beyond{margin:var(--ab-gap) 0 0;padding:0 clamp(24px,3.6vw,56px) clamp(56px,6vw,88px) 0}
+.ab-stack-title{margin:0 0 28px;font:var(--w-heading) clamp(2.2rem,3.6vw,3.2rem)/1 var(--font-display);letter-spacing:0;text-transform:none;color:var(--ab-ink)}
+.ab-beyond .ab-text{margin:0 0 32px}
 .ab-chips{display:flex;flex-wrap:wrap;gap:10px;margin:0;padding:0;list-style:none}
 .ab-chips li{
   padding:10px 20px;border:1px solid rgba(229,195,209,.3);border-radius:999px;
-  font:400 .84rem/1.2 var(--font-sub);letter-spacing:.06em;text-transform:lowercase;color:var(--ab-ink);
+  font:400 .92rem/1.2 var(--font-sub);letter-spacing:.04em;text-transform:none;color:var(--ab-ink);
   transition:background .2s,color .2s,border-color .2s;
 }
 .ab-chips li:hover{background:rgba(248,236,239,.08);border-color:var(--ac2)}

@@ -2,13 +2,16 @@
 /* Uses the site's own font and colour variables, so it follows the rest of the page. */
 
 .about2{
-  position:relative;isolation:isolate;overflow:hidden;text-transform:lowercase;
+  position:relative;isolation:isolate;overflow:hidden;
+  /* text-transform:lowercase; */
   display:flex;flex-direction:column;
   /* one screen: the photo, the writing and the tech ticker fit together at 100% zoom */
   min-height:calc(100vh - 62px);min-height:calc(100svh - 62px);
   padding:0;
   color:var(--tx,#f8ecef);
 }
+
+#about{scroll-margin-top:36px} /* clicking About lands a little lower on the screen */
 
 /* soft colour glows behind everything, fading in and out at the top and bottom */
 .ab2-bg{
@@ -23,7 +26,7 @@
 
 /* ---------- photo on the left edge, writing on the right ---------- */
 .ab2-main{
-  position:relative;flex:1;display:flex;align-items:center;
+  position:relative;flex:1;display:flex;align-items:stretch;
   box-sizing:border-box;
   padding:clamp(12px,3vh,36px) clamp(20px,5vw,64px) 0 0;
 }
@@ -51,7 +54,9 @@
 
 .ab2-content{
   position:relative;width:min(50%,800px);margin-left:auto;
-  display:grid;gap:clamp(16px,3.2vh,44px);
+  display:grid;gap:clamp(40px,7vh,88px);
+  /* intro at the top, "beyond the screen" at the bottom: the writing ends where the photo ends */
+  align-content:space-between;
 }
 
 /* ---------- introduction ---------- */
@@ -63,17 +68,17 @@
   margin:0;
   /* sized by the screen's height as well as its width, so everything fits on one screen */
   font:var(--w-heading) clamp(2.4rem,min(5.2vw,9.5vh),5.6rem)/.9 var(--font-heading);
-  letter-spacing:-.01em;text-transform:lowercase;
+  letter-spacing:-.01em;text-transform:capitalize;
   background:linear-gradient(180deg,#fff7f9 0%,#e5c3d1 55%,#ef798a 100%);
   -webkit-background-clip:text;background-clip:text;color:transparent;
 }
 .ab2-title span{-webkit-text-fill-color:var(--ac,#ef798a)}
 .ab2-text p{
-  margin:0 0 .8em;
-  font:var(--w-body) clamp(.88rem,calc(.7vw + .75vh),1.35rem)/1.6 var(--font-body);color:var(--mu,#cdaabd);
+  margin:0 0 1.1em;
+  font:var(--w-body) clamp(.95rem,calc(.85vw + .8vh),1.5rem)/1.65 var(--font-body);color:var(--mu,#cdaabd);
 }
 .ab2-text p:last-child{margin-bottom:0}
-.ab2-intro .ab2-text{margin-top:clamp(12px,2vh,28px)}
+.ab2-intro .ab2-text{margin-top:clamp(18px,3.2vh,40px)}
 
 /* ---------- beyond the screen ---------- */
 .ab2-tile{position:relative}
@@ -82,6 +87,7 @@
   font:var(--w-heading) clamp(1.4rem,min(2.4vw,4.4vh),2.6rem)/1 var(--font-heading);text-transform:lowercase;
 }
 .ab2-h3 span{color:var(--ac,#ef798a)}
+.ab2-h3::first-letter{text-transform:uppercase}
 .ab2-tile--beyond .ab2-text{columns:2;column-gap:clamp(24px,3vw,48px)}
 .ab2-tile--beyond .ab2-text p{break-inside:avoid;margin:0 0 .8em}
 .ab2-tile--beyond .ab2-text p:last-child{margin-bottom:0}
