@@ -9,12 +9,12 @@ const LEAD =
   'I love coding and building stuff that scratches a part of my brain and triggers my creativity.'
 
 const PARAGRAPHS = [
-  'Something that hasn’t been built yet, something that would help people ease their day to day tasks. And honestly, as an engineer, that’s what I want to do: take ideas that live in my head and turn them into something real that makes someone’s life a little easier.',
-  'I want to contribute my share to software engineering by building products that people actually use, not just products that exist. Ngl, it’s actually really fun, and it’s what makes my work worth it.',
+  'Something that hasn\u2019t been built yet, something that would help people ease their day to day tasks. And honestly, as an engineer, that\u2019s what I want to do: take ideas that live in my head and turn them into something real that makes someone\u2019s life a little easier.',
+  'I want to contribute my share to software engineering by building products that people actually use, not just products that exist. Ngl, it\u2019s actually really fun, and it\u2019s what makes my work worth it.',
 ]
 
 const BEYOND = [
-  'Outside of tech, I’m into crypto, music, art, and Rubik’s cubes, which is a slightly random combination, but that’s kind of the point.',
+  'Outside of tech, I\u2019m into crypto, music, art, and Rubik\u2019s cubes, which is a slightly random combination, but that\u2019s kind of the point.',
   'Apart from that, I love exploring nature and gardening. As for sports, I love playing table tennis and badminton.',
 ]
 

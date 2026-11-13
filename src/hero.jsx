@@ -1,12 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { projects, slug } from './projects.js'
 
-const STATS = [
-  [String(projects.length).padStart(2, '0'), 'Projects in orbit'],
-  ['React', 'Primary stack'],
-  ['∞', 'Curiosity'],
-]
-
 function Orbit({ n, layer }) {
   return (
     <div className={`sp-orbit sp-orbit--${n} sp-orbit--${layer}`} aria-hidden="true">
@@ -119,7 +113,7 @@ export default function Hero() {
       <div className="sp-copy">
         <h1 className="sp-title">
           <span className="sp-hi">// Hi, I’m</span>
-          <span className="sp-name" data-text="Your Name">Aakanksha</span>
+          <span className="sp-name" data-text="Your Name" id="name">Aakanksha</span>
         </h1>
 
         <h2 className="sp-role">Frontend developer <b>//</b> Interface engineer</h2>
@@ -134,20 +128,9 @@ export default function Hero() {
           <a className="sp-btn" href="#projects"><span>Explore projects</span><i aria-hidden="true">↓</i></a>
           <a className="sp-btn sp-btn--ghost" href="#contact"><span>Open comms</span></a>
         </div>
-
-        <ul className="sp-stats">
-          {STATS.map(([v, l]) => (
-            <li key={l}><b>{v}</b><span>{l}</span></li>
-          ))}
-        </ul>
       </div>
 
       <div className="sp-scene">
-        <div className="sp-reticle" aria-hidden="true" />
-        <div className="sp-reticle sp-reticle--b" aria-hidden="true" />
-
-        <Orbit n={3} layer="back" />
-        <Orbit n={2} layer="back" />
         <Orbit n={1} layer="back" />
 
         <div className="sp-planet" aria-hidden="true">
@@ -156,8 +139,6 @@ export default function Hero() {
           <div className="sp-shade" />
         </div>
 
-        <Orbit n={3} layer="front" />
-        <Orbit n={2} layer="front" />
         <Orbit n={1} layer="front" />
 
         {projects.slice(0, 3).map((p, i) => (

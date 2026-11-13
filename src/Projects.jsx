@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { projects, slug } from './projects.js'
+import './Projects.css'
 
 const BARS = [38, 62, 48, 80, 56, 92, 70, 84]
 const LINES = [72, 46, 88, 32, 64, 52, 78]
@@ -9,7 +10,10 @@ function Visual({ kind, image }) {
   if (image) {
     return (
       <div className="proj-visual">
-        <img src={image} alt="" loading="lazy" />
+        <div className="win win--shot">
+          <div className="win-bar" aria-hidden="true"><i /><i /><i /></div>
+          <img src={image} alt="Screenshot of the project" loading="lazy" />
+        </div>
       </div>
     )
   }
@@ -89,7 +93,11 @@ export default function Projects() {
               <ul className="proj-tags">
                 {p.tags.map(t => <li key={t}>{t}</li>)}
               </ul>
-              <a className="proj-btn" href={p.href ?? '#projects'}>
+              <a
+                className="proj-btn"
+                href={p.href ?? '#projects'}
+                {...(p.href ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+              >
                 Read more <span aria-hidden="true">↗</span>
               </a>
             </div>

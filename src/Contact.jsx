@@ -2,12 +2,12 @@ import { useEffect, useRef } from 'react'
 import './Contact.css'
 
 // Put your real links and handles here. Delete a line to remove that card.
-const EMAIL = 'you@example.com'
+const EMAIL = 'aakanksha.kumar29@gmail.com'
 
 const SOCIALS = [
-  { name: 'LinkedIn', handle: 'in/your-handle', url: 'https://www.linkedin.com/in/your-handle', icon: 'linkedin' },
-  { name: 'GitHub', handle: '@your-handle', url: 'https://github.com/your-handle', icon: 'github' },
-  { name: 'Instagram', handle: '@your-handle', url: 'https://www.instagram.com/your-handle', icon: 'instagram' },
+  { name: 'LinkedIn', handle: 'in/aakanksha-kumar-026153304', url: 'https://www.linkedin.com/in/aakanksha-kumar-026153304', icon: 'linkedin' },
+  { name: 'GitHub', handle: '@aakankshak1', url: 'https://github.com/aakankshak1', icon: 'github' },
+  { name: 'Instagram', handle: '@_________aakanksha_________', url: 'https://www.instagram.com/_________aakanksha_________/', icon: 'instagram' },
   // email card (hidden if EMAIL is empty)
   ...(EMAIL ? [{ name: 'Email', handle: EMAIL, url: `mailto:${EMAIL}`, icon: 'mail' }] : []),
 ]

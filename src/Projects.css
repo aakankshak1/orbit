@@ -1,0 +1,6 @@
+/* "things i've built" uses the same soft pink gradient as "about me" and "let's connect" */
+.trans .projects-title{
+  background:linear-gradient(180deg,#fff7f9 0%,#e5c3d1 45%,#ef798a 100%);
+  -webkit-background-clip:text;background-clip:text;
+  color:transparent;-webkit-text-fill-color:transparent;
+}

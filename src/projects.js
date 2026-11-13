@@ -10,7 +10,7 @@ export const projects = [
     tags: ['machine learning', 'llm agents'],
     kind: 'bars',
     image: null,
-    href: null,
+    href: 'https://github.com/aakankshak1/Drug-Agent',
   },
   {
     name: 'Process Supervisor',
@@ -19,16 +19,16 @@ export const projects = [
     tags: ['c', 'systems'],
     kind: 'lines',
     image: null,
-    href: null,
+    href: 'https://github.com/aakankshak1/process-supervisor',
   },
   {
-    name: 'Tab Tamer',
+    name: 'TidyStack',
     pitch:
-      'A calm, privacy-first Chrome extension for keeping your tabs under control.',
-    tags: ['chrome extension', 'privacy'],
+      'A Chrome extension that keeps your tabs tidy: group them by topic, catch duplicates, and send idle ones to the graveyard.',
+    tags: ['chrome extension'],
     kind: 'tabs',
-    image: null,
-    href: null,
+    image: '/tidystack_image.png',
+    href: 'https://github.com/aakankshak1/TidyStack',
   },
 ]
 

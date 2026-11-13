@@ -22,7 +22,6 @@
   padding-top: env(safe-area-inset-top, 0px);
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
-
 *,
 *::before,
 *::after {
@@ -733,11 +732,23 @@ footer {
   width: 100%;
 }
 
-.proj-visual img {
-  display: block;
-  width: 100%;
+.win.win--shot {
   height: auto;
-  border-radius: 8px 8px 0 0;
+  align-items: center;
+}
+
+.win--shot .win-bar {
+  align-self: flex-start;
+}
+
+.win--shot img {
+  display: block;
+  height: 300px;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  border-radius: 6px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
 }
 
 .win {
