@@ -15,6 +15,9 @@
   --w-heading: 300;
   --w-sub: 300;
   --w-body: 300;
+  /* one body-text size for the whole site: hero, projects, about and contact all use this */
+  --fs-body: 1.2rem;
+  --lh-body: 1.7;
   /* the one gap used above every section, so the spacing is even all the way down the page */
   --section-gap: clamp(120px, 14vw, 220px);
   color-scheme: dark;
@@ -683,8 +686,8 @@ footer {
 .proj-copy p {
   margin: 0;
   max-width: 48ch;
-  font-size: 1.05rem;
-  line-height: 1.65;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
   color: rgba(248, 236, 239, 0.78);
 }
 
@@ -959,8 +962,9 @@ footer {
 .sp-role b{color:#7d82b8;font-weight:var(--w-sub);margin:0 .35em}
 .sp-body{
   max-width:none;margin:0;
-  font:var(--w-body) 1.08rem/1.6 var(--font-body);
+  font:var(--w-body) var(--fs-body)/var(--lh-body) var(--font-body);
   color:rgba(229,195,209,.86);
+  text-align:justify;text-align-last:left;hyphens:auto;-webkit-hyphens:auto;
 }
 .sp-body + .sp-body{margin-top:14px}
 

@@ -29,7 +29,7 @@
 .ab2-main{
   position:relative;flex:1;display:flex;align-items:stretch;
   box-sizing:border-box;
-  padding:clamp(76px,calc(3vh + 64px),104px) clamp(20px,5vw,64px) 0 0;
+  padding:clamp(40px,calc(2vh + 24px),64px) clamp(20px,5vw,64px) 0 0;
 }
 
 /* the photo fills the left of the screen and dissolves into the page */
@@ -38,7 +38,7 @@
      little above where the "About Me" heading starts. Make --head-y bigger to move her down,
      smaller to move her up. (Her photo is 1206 x 1578, her hair starts 28.8% down it.) */
   --pw:min(44vw,660px);                               /* photo width */
-  --pad:clamp(76px,calc(3vh + 64px),104px);           /* same space the heading has above it */
+  --pad:clamp(40px,calc(2vh + 24px),64px);            /* same space the heading has above it */
   --hd:calc(var(--pw) * 1.309);                       /* photo height at this width */
   --head-y:calc(var(--pad) - 14px);
   /* the photo box starts --ext above the section, so the cloth over her head has a long
@@ -46,7 +46,7 @@
   --ext:clamp(90px,16vh,170px);
   --hy:calc(var(--ext) + var(--head-y));
   position:absolute;left:0;top:calc(var(--ext) * -1);width:var(--pw);overflow:hidden;
-  height:min(calc(100% + var(--ext)),calc(var(--hy) + var(--hd) * .712));
+  height:calc(100% + var(--ext));
   /* blends into the page on every side: long soft fades at the top, right and bottom.
      The heading starts lower than the top edge, so the fade happens above her head. */
   /* three soft fades multiplied together: an oval one that feathers every edge evenly (so there is
@@ -64,7 +64,7 @@
   /* placed so the top of her hair lands at --head-y (set above); the empty cloth over her head is cropped off */
   position:absolute;left:0;width:100%;
   top:calc(var(--hy) - var(--hd) * .288);
-  display:block;height:var(--hd);
+  display:block;height:max(var(--hd),calc(100% - (var(--hy) - var(--hd) * .288)));
   object-fit:cover;object-position:center top;
   filter:brightness(.93); /* a touch darker: 1 = original, lower = darker */
   /* the photo is decoration: it can't be dragged or selected */
@@ -86,7 +86,7 @@
 
 .ab2-content{
   position:relative;width:min(58%,800px);margin-left:auto;
-  display:grid;gap:clamp(48px,6vh,72px);
+  display:grid;gap:clamp(28px,4vh,48px);
   align-content:start;
 }
 
@@ -105,26 +105,27 @@
 }
 .ab2-title span{-webkit-text-fill-color:var(--ac,#ef798a)}
 .ab2-text p{
-  margin:0 0 1.1em;
-  font:var(--w-body) clamp(.95rem,calc(.85vw + .8vh),1.5rem)/1.65 var(--font-body);color:var(--mu,#cdaabd);
+  margin:0 0 1.35em;
+  font:var(--w-body) var(--fs-body)/var(--lh-body) var(--font-body);color:var(--mu,#cdaabd);
+  text-align:justify;text-align-last:left;hyphens:auto;-webkit-hyphens:auto;
 }
 .ab2-text p:last-child{margin-bottom:0}
-.ab2-intro .ab2-text{margin-top:clamp(18px,3.2vh,40px)}
+.ab2-intro .ab2-text{margin-top:clamp(24px,4.2vh,52px)}
 
 /* ---------- beyond the screen ---------- */
 .ab2-tile{position:relative}
 .ab2-h3{
-  margin:0 0 clamp(10px,1.8vh,20px);
-  font:var(--w-heading) clamp(1.4rem,min(2.4vw,4.4vh),2.6rem)/1 var(--font-heading);text-transform:lowercase;
+  margin:0 0 clamp(16px,2.6vh,28px);
+  font:var(--w-heading) clamp(1.5rem,min(2.6vw,4.8vh),2.9rem)/1 var(--font-heading);text-transform:lowercase;
 }
 .ab2-h3 span{color:var(--ac,#ef798a)}
 .ab2-tile--beyond .ab2-text{columns:2;column-gap:clamp(24px,3vw,48px)}
-.ab2-tile--beyond .ab2-text p{break-inside:avoid;margin:0 0 .8em}
+.ab2-tile--beyond .ab2-text p{break-inside:avoid;margin:0 0 1em}
 .ab2-tile--beyond .ab2-text p:last-child{margin-bottom:0}
 
 /* ---------- tech stack ticker, full width of the screen ---------- */
 .ab2-marquee{
-  margin-top:clamp(12px,2.5vh,32px);
+  margin-top:clamp(36px,7vh,84px);
   overflow:hidden;padding:clamp(10px,1.6vw,18px) 0;
   border-block:1px solid rgba(229,195,209,.12);
   -webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);
@@ -160,7 +161,6 @@
   }
   .ab2-content{width:auto;margin:0;padding:0 clamp(20px,5vw,40px);gap:44px}
   .ab2-title{font-size:clamp(2.8rem,12vw,4.5rem)}
-  .ab2-text p{font-size:1.05rem}
   .ab2-h3{font-size:1.8rem}
   .ab2-marquee{margin-top:56px}
   .ab2-track li{font-size:clamp(2rem,9vw,3rem)}
