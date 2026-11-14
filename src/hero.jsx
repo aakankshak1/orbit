@@ -4,13 +4,93 @@ import { projects, slug } from './projects.js'
 function Orbit({ n, layer }) {
   return (
     <div className={`sp-orbit sp-orbit--${n} sp-orbit--${layer}`} aria-hidden="true">
-      <div className="sp-orbit-spin"><span className="sp-sat" /></div>
+      <div className="sp-orbit-spin" />
     </div>
   )
 }
 
 export default function Hero() {
   const canvasRef = useRef(null)
+  const sceneRef = useRef(null)
+  const callRefs = useRef([])
+
+  // project labels ride the rings. Same maths the CSS rings use (rotate, then
+  // perspective + rotateX), so each label stays exactly on its ring.
+  useEffect(() => {
+    const scene = sceneRef.current
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches
+    const ROT = (-16 * Math.PI) / 180
+    const TILT = (72 * Math.PI) / 180
+    const PERSP = 1400
+    // d = ring size (% of scene), dur = seconds per lap, a = start angle
+    const rides = [
+      { d: 0.8, dur: 50, a: 2.4 },
+      { d: 0.98, dur: 75, a: 4.9 },
+      { d: 1.16, dur: 105, a: 0.6 },
+    ]
+    const paused = [false, false, false]
+    const cleanups = []
+    callRefs.current.forEach((el, i) => {
+      if (!el) return
+      const on = () => { paused[i] = true }
+      const off = () => { paused[i] = false }
+      el.addEventListener('pointerenter', on)
+      el.addEventListener('pointerleave', off)
+      el.addEventListener('focus', on)
+      el.addEventListener('blur', off)
+      cleanups.push(() => {
+        el.removeEventListener('pointerenter', on)
+        el.removeEventListener('pointerleave', off)
+        el.removeEventListener('focus', on)
+        el.removeEventListener('blur', off)
+      })
+    })
+
+    function place() {
+      const W = scene.clientWidth
+      rides.forEach((r, i) => {
+        const el = callRefs.current[i]
+        if (!el) return
+        const rad = (r.d * W) / 2
+        const x = rad * Math.cos(r.a)
+        const y0 = rad * Math.sin(r.a)
+        const y = y0 * Math.cos(TILT)
+        const z = y0 * Math.sin(TILT)
+        const s = PERSP / (PERSP - z)
+        const px = x * s
+        const py = y * s
+        const X = px * Math.cos(ROT) - py * Math.sin(ROT)
+        const Y = px * Math.sin(ROT) + py * Math.cos(ROT)
+        const front = Math.sin(r.a) > 0
+        el.style.transform =
+          `translate(${(W / 2 + X).toFixed(1)}px, ${(W / 2 + Y).toFixed(1)}px) translate(-50%, -115%) scale(${s.toFixed(3)})`
+        el.style.zIndex = front ? '3' : '-1'
+        el.style.opacity = (0.65 + 0.35 * ((Math.sin(r.a) + 1) / 2)).toFixed(2)
+      })
+    }
+
+    place()
+    let raf = 0
+    if (!reduce) {
+      let last = performance.now()
+      const tick = (now) => {
+        const dt = Math.min((now - last) / 1000, 0.1)
+        last = now
+        rides.forEach((r, i) => {
+          if (!paused[i]) r.a += (dt * Math.PI * 2) / r.dur
+        })
+        place()
+        raf = requestAnimationFrame(tick)
+      }
+      raf = requestAnimationFrame(tick)
+    }
+    addEventListener('resize', place)
+    return () => {
+      cancelAnimationFrame(raf)
+      removeEventListener('resize', place)
+      cleanups.forEach((fn) => fn())
+    }
+  }, [])
 
   // starfield + shooting stars
   useEffect(() => {
@@ -130,7 +210,9 @@ export default function Hero() {
         </div>
       </div>
 
-      <div className="sp-scene">
+      <div className="sp-scene" ref={sceneRef}>
+        <Orbit n={3} layer="back" />
+        <Orbit n={2} layer="back" />
         <Orbit n={1} layer="back" />
 
         <div className="sp-planet" aria-hidden="true">
@@ -139,12 +221,16 @@ export default function Hero() {
           <div className="sp-shade" />
         </div>
 
+        <Orbit n={3} layer="front" />
+        <Orbit n={2} layer="front" />
         <Orbit n={1} layer="front" />
 
         {projects.slice(0, 3).map((p, i) => (
           <a
             key={p.name}
-            className={`sp-call sp-call--${'abc'[i]}`}
+            ref={(el) => { callRefs.current[i] = el }}
+            className="sp-call sp-call--ride"
+            style={{ '--rc': ['#ef798a', '#e5c3d1', '#9aa0d6'][i] }}
             href={`#project-${slug(p.name)}`}
           >
             {p.name}<em>{p.tags[0]}</em>

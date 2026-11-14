@@ -1036,14 +1036,14 @@ footer {
   transform:rotate(var(--rot)) perspective(1400px) rotateX(var(--tilt));
   pointer-events:none;
 }
-.sp-orbit--1{--d:92%;--rot:-16deg;--tilt:70deg;--dur:14s;--c:#ef798a;--bs:solid;--bc:rgba(239,121,138,.75)}
-.sp-orbit--2{--d:112%;--rot:22deg;--tilt:66deg;--dur:22s;--c:#e5c3d1;--bs:dashed;--bc:rgba(125,130,184,.8)}
-.sp-orbit--3{--d:132%;--rot:-4deg;--tilt:76deg;--dur:32s;--c:#7d82b8;--bs:dotted;--bc:rgba(229,195,209,.5)}
+.sp-orbit--1{--d:80%;--rot:-16deg;--tilt:72deg;--dur:14s;--c:#ef798a;--bs:solid;--bc:rgba(239,121,138,.75)}
+.sp-orbit--2{--d:98%;--rot:-16deg;--tilt:72deg;--dur:22s;--c:#e5c3d1;--bs:solid;--bc:rgba(229,195,209,.55)}
+.sp-orbit--3{--d:116%;--rot:-16deg;--tilt:72deg;--dur:32s;--c:#7d82b8;--bs:solid;--bc:rgba(125,130,184,.7)}
 .sp-orbit--back{clip-path:inset(0 0 50% 0)}
 .sp-orbit--front{clip-path:inset(50% 0 0 0)}
 .sp-orbit-spin{
   position:absolute;inset:0;border-radius:50%;border:1px var(--bs) var(--bc);
-  animation:sp-spin var(--dur) linear infinite;
+  animation:none;
 }
 .sp-sat{
   position:absolute;top:0;left:50%;width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-radius:50%;
@@ -1060,9 +1060,17 @@ footer {
 .sp-call em{font-style:normal;font-weight:400;font-size:.74rem;color:#cdaabd;letter-spacing:.06em}
 .sp-call::before{content:"";display:block;width:54px;height:1px;background:#ef798a;margin-bottom:8px;transition:width .25s}
 .sp-call:hover::before{width:80px}
-.sp-call--a{top:4%;right:-2%}
-.sp-call--b{bottom:8%;left:-6%}
-.sp-call--c{top:50%;right:-9%}
+.sp-call--ride{
+  left:0;top:0;transform-origin:50% 50%;
+  padding:0;white-space:nowrap;
+  font-size:.72rem;line-height:1;letter-spacing:.04em;
+  color:var(--rc,#ef798a);
+  text-shadow:0 0 6px rgba(22,13,28,.95),0 0 2px rgba(22,13,28,.95);
+  will-change:transform;
+}
+.sp-call--ride em{display:none}
+.sp-call--ride::before{display:none}
+.sp-call--ride:hover,.sp-call--ride:focus-visible{color:#fff}
 
 /* bottom HUD */
 .sp-hud{
