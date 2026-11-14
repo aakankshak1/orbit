@@ -196,12 +196,21 @@ export default function Hero() {
           <span className="sp-name" data-text="Your Name" id="name">Aakanksha</span>
         </h1>
 
-        <h2 className="sp-role">Frontend developer <b>//</b> Interface engineer</h2>
+        <h2 className="sp-role">AI engineer <b>//</b> Frontend developer</h2>
 
         <p className="sp-body">
-          I design and build interfaces that feel fast, look sharp, and behave
-          like they were engineered for zero gravity. Pick a mission below to
-          see what I’ve shipped.
+          As an AI engineer, I build polished, interactive experiences by
+          combining software engineering with AI and my frontend engineering
+          skills to turn ideas into practical solutions.
+        </p>
+        <p className="sp-body">
+          I believe AI should make us faster, not make us dependent. A good
+          engineer knows how to leverage AI to save time, but also understands
+          what they’re building and can debug, adapt and fix things when they
+          break.
+        </p>
+        <p className="sp-body">
+          Pick a mission below to explore what I’ve built.
         </p>
 
         <div className="sp-cta">

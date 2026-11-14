@@ -99,7 +99,7 @@
   margin:0;
   /* sized by the screen's height as well as its width, so everything fits on one screen */
   font:var(--w-heading) clamp(2.4rem,min(5.2vw,9.5vh),5.6rem)/.9 var(--font-heading);
-  letter-spacing:-.01em;text-transform:capitalize;
+  letter-spacing:-.01em;text-transform:lowercase;
   background:linear-gradient(180deg,#fff7f9 0%,#e5c3d1 55%,#ef798a 100%);
   -webkit-background-clip:text;background-clip:text;color:transparent;
 }
@@ -118,7 +118,6 @@
   font:var(--w-heading) clamp(1.4rem,min(2.4vw,4.4vh),2.6rem)/1 var(--font-heading);text-transform:lowercase;
 }
 .ab2-h3 span{color:var(--ac,#ef798a)}
-.ab2-h3::first-letter{text-transform:uppercase}
 .ab2-tile--beyond .ab2-text{columns:2;column-gap:clamp(24px,3vw,48px)}
 .ab2-tile--beyond .ab2-text p{break-inside:avoid;margin:0 0 .8em}
 .ab2-tile--beyond .ab2-text p:last-child{margin-bottom:0}

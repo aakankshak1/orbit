@@ -958,10 +958,11 @@ footer {
 }
 .sp-role b{color:#7d82b8;font-weight:var(--w-sub);margin:0 .35em}
 .sp-body{
-  max-width:46ch;margin:0;
-  font:var(--w-body) 1.12rem/1.65 var(--font-body);
+  max-width:none;margin:0;
+  font:var(--w-body) 1.08rem/1.6 var(--font-body);
   color:rgba(229,195,209,.86);
 }
+.sp-body + .sp-body{margin-top:14px}
 
 /* buttons */
 .sp-cta{display:flex;flex-wrap:wrap;gap:16px;margin-top:32px}
